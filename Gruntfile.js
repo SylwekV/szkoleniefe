@@ -1,26 +1,47 @@
 module.exports = function(grunt) {
-
-  grunt.initConfig({
-	  connect: {
-		server: {
-		  options: {
-			port: 9900,
-			hostname: 'localhost',
-			base: '.',
-			keepalive: true,
-			open: true,
-			onCreateServer: function(server, connect, options) {
-			  var io = require('socket.io').listen(server);
-			  io.sockets.on('connection', function(socket) {
-				alert('abc');
-			  });
-			}
-		  }
-		}
-	  }
-  });
-
-  grunt.loadNpmTasks('grunt-contrib-connect');
-  grunt.registerTask('default', ['connect']);
-
-};
+	
+	    grunt.initConfig({
+	        connect: {
+	            options: {
+	                port: 7700,
+	                hostname: 'localhost',
+					open: true,
+	                base: [
+	                    'bower_components',
+						'.'
+	                ]
+	            },
+	            server: {
+	                options: {
+	                    open: true,
+	                    livereload: 8999
+	                }
+	            }
+	        },
+	        watch: {
+	            options: {
+	                livereload: 8999
+	                // processes are spawned by default (unspawned grunt fails often)
+	            },
+	            livereload: {
+	                files: [
+	                    '**/*'
+	                ]
+	            },
+	            'index': {
+	                files: ['index.html'],
+	                tasks: [] // nothing to do here
+	            }
+	        }
+	    });
+	
+	    grunt.loadNpmTasks('grunt-contrib-connect');
+	    grunt.loadNpmTasks('grunt-contrib-watch');
+	
+	    grunt.registerTask('build', [
+	        'connect',
+	        'watch'
+	    ]);
+	
+	    grunt.registerTask('default', ['build']);
+	};
