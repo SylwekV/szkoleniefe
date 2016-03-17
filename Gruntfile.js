@@ -13,6 +13,14 @@ module.exports = function(grunt) {
 			
 			
 		},
+		
+		clean: {
+			output: '<%= cfg.paths.output %>/*',
+			options: {
+				force: true
+			}
+		},
+		
 			copy: {
 			  index: {
 				src: '<%= cfg.paths.source %>/index.html',
@@ -30,7 +38,8 @@ module.exports = function(grunt) {
 					open: true,
 	                base: [
 	                    'bower_components',
-						'.'
+						'.',
+						'dist'
 	                ]
 	            },
 	            server: {
@@ -51,7 +60,7 @@ module.exports = function(grunt) {
 	                ]
 	            },
 	            'index': {
-	                files: ['<%= cfg.paths.source %>/index.html'],
+	                files: ['<%= cfg.paths.output %>/index.html'],
 	                tasks: [] // nothing to do here
 	            }
 	        }
@@ -59,7 +68,14 @@ module.exports = function(grunt) {
 	
 		require('load-grunt-tasks')(grunt);
 	
-	    grunt.registerTask('build', [
+	    grunt.registerTask('server', [
+	        'connect',
+	        'watch'
+	    ]);
+		
+		grunt.registerTask('build', [
+			'clean',
+			'copy',
 	        'connect',
 	        'watch'
 	    ]);
@@ -71,5 +87,7 @@ module.exports = function(grunt) {
 		});
 	
 	    grunt.registerTask('default', ['build']);
+		grunt.registerTask('default', ['server']);
 		grunt.registerTask('default', ['copy']);
+		grunt.registerTask('default', ['clean']);
 	};
